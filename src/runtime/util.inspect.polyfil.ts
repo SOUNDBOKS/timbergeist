@@ -1,4 +1,4 @@
-import { InspectOptions } from "util";
+import type { InspectOptions } from "util";
 import { prettyLogStyles } from "../prettyLogStyles.js";
 import { jsonStringifyRecursive } from "./helper.jsonStringifyRecursive.js";
 

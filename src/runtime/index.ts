@@ -86,15 +86,6 @@ export function prettyFormatErrorObj(error: Error, settings: IPrettyPrinterTrans
     return formatTemplate(settings, settings.prettyErrorTemplate, placeholderValuesError);
 }
 
-export function transportFormatted(logMetaMarkup: string, logArgs: unknown[], logErrors: string[]): void {
-    const logErrorsStr = (logErrors.length > 0 && logArgs.length > 0 ? "\n" : "") + logErrors.join("\n");
-    console.log(logMetaMarkup + formatWithOptions({ colors: true }, ...logArgs) + logErrorsStr);
-}
-
-export function transportJSON<LogObj>(json: LogObj & ILogObjMeta): void {
-    console.log(jsonStringifyRecursive(json));
-}
-
 export function isBuffer(arg?: unknown) {
     return arg ? undefined : undefined;
 }

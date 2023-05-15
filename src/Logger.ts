@@ -3,13 +3,13 @@ import { ILogOptionsParam, ILogOptions, ILogObjMeta, IErrorObject, ITransport } 
 import { ConsoleSink, PrettyPrinterTransport } from "./prettyPrinter.js";
 export * from "./interfaces.js";
 
-export class Logger {
-    private parentLogger: Logger | null = null;
+export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
+    private parentLogger: Logger<Meta> | null = null;
     private attachedTransports: ITransport[];
 
-    public options: ILogOptions;
+    public options: ILogOptions<Meta>;
 
-    constructor(options?: ILogOptionsParam, transports?: ITransport[], private stackDepthLevel: number = 4) {
+    constructor(options?: ILogOptionsParam<Meta>, transports?: ITransport[], private stackDepthLevel: number = 4) {
         const isBrowser = ![typeof window, typeof document].includes("undefined");
         const isSafari = isBrowser ? /^((?!chrome|android).)*safari/i.test(navigator?.userAgent) : false;
         this.stackDepthLevel = isSafari ? 4 : this.stackDepthLevel;
@@ -25,10 +25,11 @@ export class Logger {
             maskValuesRegEx: options?.maskValuesRegEx,
             overwrite: {
                 mask: options?.overwrite?.mask,
-                addMeta: options?.overwrite?.addMeta,
+                mapMeta: options?.overwrite?.mapMeta,
             },
             propagateLogsToParent: options?.propagateLogsToParent ?? true,
             parentNames: options?.parentNames || [],
+            defaultMetadata: options?.defaultMetadata,
         };
 
         // style only for server and blink browsers
@@ -43,7 +44,8 @@ export class Logger {
                 ? this._mask(args)
                 : args;
 
-        meta = this.options.overwrite?.addMeta?.call(undefined, args, meta) ?? meta;
+        meta = this.options.defaultMetadata ? { ...this.options.defaultMetadata, ...meta } : meta;
+        meta = this.options.overwrite?.mapMeta?.call(undefined, args, meta) ?? meta;
 
         if (meta.logLevelId >= this.options.minLevel) {
             this.attachedTransports.forEach((transport) => {
@@ -89,8 +91,8 @@ export class Logger {
      * @param settings - Overwrite settings inherited from parent logger
      * @param logObj - Overwrite logObj for sub-logger
      */
-    public getSubLogger(settings?: ILogOptionsParam): Logger {
-        const subLoggerSettings: ILogOptions = {
+    public getSubLogger(settings?: ILogOptionsParam<Meta>): Logger<Meta> {
+        const subLoggerSettings: ILogOptions<Meta> = {
             ...{
                 ...this.options,
                 name: undefined,

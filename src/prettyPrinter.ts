@@ -22,6 +22,7 @@ export class PrettyPrinterTransport implements ITransport {
         this.sink = sink;
 
         this.settings = {
+            customInspectOptions:  settings.customInspectOptions || {},
             hideLogPositionForProduction: settings?.hideLogPositionForProduction ?? false,
             prettyLogTemplate:
                 settings?.prettyLogTemplate ??
@@ -61,7 +62,10 @@ export class PrettyPrinterTransport implements ITransport {
         const logMetaMarkup = this._prettyFormatLogObjMeta(meta);
         logArgsAndErrorsMarkup = prettyFormatLogObj(logArgs, this.settings);
 
-        const logMarkup = formatWithOptions({ colors: true }, ...logArgs);
+        const logMarkup = formatWithOptions({
+            ...this.settings.customInspectOptions,
+            colors: this.settings.stylePrettyLogs
+        }, ...logArgs);
         const logErrorsStr = (logArgsAndErrorsMarkup.errors.length > 0 && logArgs.length > 0 ? "\n" : "") + logArgsAndErrorsMarkup.errors.join("\n");
 
         this.sink(logMetaMarkup + logMarkup + logErrorsStr, meta.logLevelId);

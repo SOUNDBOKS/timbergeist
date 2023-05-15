@@ -1,4 +1,6 @@
-export type IMeta = {
+import type { InspectOptions } from "util";
+
+ export type ILogObjMeta = {
     date: Date;
     logLevelId: number;
     logLevelName: string;
@@ -19,7 +21,7 @@ export interface ITransport {
     transport(logArgs: unknown[], meta: ILogObjMeta): void;
 }
 
-export interface ILogOptionsParam {
+export interface ILogOptionsParam<Meta extends ILogObjMeta > {
     name?: string;
     minLevel?: number;
     argumentsArrayName?: string;
@@ -32,8 +34,9 @@ export interface ILogOptionsParam {
     parentNames?: string[];
     overwrite?: {
         mask?: (args: unknown[]) => unknown[];
-        addMeta?: (logArgs: unknown[], baseMeta: ILogObjMeta) => ILogObjMeta;
+        mapMeta?: (logArgs: unknown[], baseMeta: ILogObjMeta) => ILogObjMeta;
     };
+    defaultMetadata?: Omit<Meta, keyof ILogObjMeta>,
 }
 
 export interface IPrettyPrinterTransportSettings {
@@ -43,7 +46,6 @@ export interface IPrettyPrinterTransportSettings {
     prettyErrorStackTemplate: string;
     prettyErrorParentNamesSeparator: string;
     prettyErrorLoggerNameDelimiter: string;
-    stylePrettyLogs: boolean;
     prettyLogTimeZone: "UTC" | "local";
     prettyLogStyles: {
         yyyy?: TStyle;
@@ -66,9 +68,11 @@ export interface IPrettyPrinterTransportSettings {
         errorName?: TStyle;
         errorMessage?: TStyle;
     };
+    stylePrettyLogs: boolean;
+    customInspectOptions: Omit<InspectOptions, "colors">;
 }
 
-export interface ILogOptions extends ILogOptionsParam {
+export interface ILogOptions<Meta extends ILogObjMeta> extends ILogOptionsParam<Meta> {
     name?: string;
     minLevel: number;
     maskPlaceholder: string;
@@ -76,12 +80,6 @@ export interface ILogOptions extends ILogOptionsParam {
     maskValuesOfKeysCaseInsensitive: boolean;
     propagateLogsToParent: boolean;
 }
-
-export type ILogObjMeta = {
-    [M in keyof IMeta]: IMeta[M];
-} & {
-    [k: string]: unknown;
-};
 
 export interface IStackFrame {
     fullFilePath?: string;
