@@ -4137,6 +4137,11 @@ node-fetch@2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
+node-inspect-extracted@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/node-inspect-extracted/-/node-inspect-extracted-2.0.2.tgz#e5500e79f6bc03517175881c991f3bfaea67115a"
+  integrity sha512-8qm9+tu/GmbA/uWQRs6ad8KstyhH94a0pXpRVGHaJ9wHlJbetCYoCwXbKILaaMcE+wgbgpOpzcCnipkL8vTqxA==
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"

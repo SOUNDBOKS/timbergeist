@@ -1,4 +1,4 @@
-import type { InspectOptions } from "util";
+import type { InspectOptions } from "./runtime/util.inspect.polyfil";
 
  export type ILogObjMeta = {
     date: Date;
