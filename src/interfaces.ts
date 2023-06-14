@@ -25,11 +25,6 @@ export interface ILogOptionsParam<Meta extends ILogObjMeta > {
     name?: string;
     minLevel?: number;
     argumentsArrayName?: string;
-    maskPlaceholder?: string;
-    maskValuesOfKeys?: string[];
-    maskValuesOfKeysCaseInsensitive?: boolean;
-    /** Mask all occurrences (case-sensitive) from values in logs (e.g. all secrets from ENVs etc.). Will be replaced with [***] */
-    maskValuesRegEx?: RegExp[];
     propagateLogsToParent?: boolean;
     parentNames?: string[];
     overwrite?: {
@@ -75,9 +70,6 @@ export interface IPrettyPrinterTransportSettings {
 export interface ILogOptions<Meta extends ILogObjMeta> extends ILogOptionsParam<Meta> {
     name?: string;
     minLevel: number;
-    maskPlaceholder: string;
-    maskValuesOfKeys: string[];
-    maskValuesOfKeysCaseInsensitive: boolean;
     propagateLogsToParent: boolean;
 }
 

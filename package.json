@@ -1,6 +1,6 @@
 {
     "name": "@soundboks/tslog",
-    "version": "5.0.0-alpha.11",
+    "version": "5.0.0-alpha.12",
     "description": "Development fork of fullstack-build/tslog for convenience internally. Use at your own peril.",
     "author": "Eugene <opensource@terehov.de> (http://fullstack.build/)",
     "license": "MIT",

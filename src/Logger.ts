@@ -19,10 +19,6 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
             name: options?.name,
             minLevel: options?.minLevel ?? 0,
             argumentsArrayName: options?.argumentsArrayName,
-            maskPlaceholder: options?.maskPlaceholder ?? "[***]",
-            maskValuesOfKeys: options?.maskValuesOfKeys ?? ["password"],
-            maskValuesOfKeysCaseInsensitive: options?.maskValuesOfKeysCaseInsensitive ?? false,
-            maskValuesRegEx: options?.maskValuesRegEx,
             overwrite: {
                 mask: options?.overwrite?.mask,
                 mapMeta: options?.overwrite?.mapMeta,
@@ -40,8 +36,6 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
         const maskedArgs: unknown[] =
             this.options.overwrite?.mask != null
                 ? this.options.overwrite?.mask(args)
-                : this.options.maskValuesOfKeys != null && this.options.maskValuesOfKeys.length > 0
-                ? this._mask(args)
                 : args;
 
         meta = this.options.defaultMetadata ? { ...this.options.defaultMetadata, ...meta } : meta;
@@ -67,9 +61,6 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      */
     public log(logLevelId: number, logLevelName: string, ...args: unknown[]) {
         const meta = getMeta(logLevelId, logLevelName, this.stackDepthLevel, this.options.name, this.options.parentNames);
-
-        // TODO: Figure out what this does
-        args = args?.map((arg) => (isError(arg) ? this._toErrorObject(arg as Error) : arg));
 
         if (logLevelId >= this.options.minLevel) {
             this.transport(args, meta);
@@ -107,108 +98,6 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
         subLogger.parentLogger = this;
 
         return subLogger;
-    }
-
-    private _mask(args: unknown[]): unknown[] {
-        const maskValuesOfKeys =
-            this.options.maskValuesOfKeysCaseInsensitive !== true
-                ? this.options.maskValuesOfKeys
-                : this.options.maskValuesOfKeys.map((key) => key.toLowerCase());
-        return args?.map((arg) => {
-            return this._recursiveCloneAndMaskValuesOfKeys(arg, maskValuesOfKeys);
-        });
-    }
-
-    private _recursiveCloneAndMaskValuesOfKeys<T>(source: T, keys: (number | string)[], seen: unknown[] = []): T {
-        if (seen.includes(source)) {
-            return { ...source };
-        }
-        if (typeof source === "object" && source != null) {
-            seen.push(source);
-        }
-
-        return isBuffer(source)
-            ? source // dont copy Buffer
-            : source instanceof Map
-            ? new Map(source)
-            : source instanceof Set
-            ? new Set(source)
-            : Array.isArray(source)
-            ? source.map((item) => this._recursiveCloneAndMaskValuesOfKeys(item, keys, seen))
-            : source instanceof Date
-            ? new Date(source.getTime())
-            : isError(source)
-            ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-                  // mask
-                  o[prop] = keys.includes(this.options?.maskValuesOfKeysCaseInsensitive !== true ? prop : prop.toLowerCase())
-                      ? this.options.maskPlaceholder
-                      : this._recursiveCloneAndMaskValuesOfKeys((source as { [key: string]: unknown })[prop], keys, seen);
-                  return o;
-              }, this._cloneError(source as Error))
-            : source != null && typeof source === "object"
-            ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-                  // mask
-                  o[prop] = keys.includes(this.options?.maskValuesOfKeysCaseInsensitive !== true ? prop : prop.toLowerCase())
-                      ? this.options.maskPlaceholder
-                      : this._recursiveCloneAndMaskValuesOfKeys((source as { [key: string]: unknown })[prop], keys, seen);
-                  return o;
-              }, Object.create(Object.getPrototypeOf(source)))
-            : ((source: T): T => {
-                  // mask regEx
-                  this.options?.maskValuesRegEx?.forEach((regEx) => {
-                      source = (source as string)?.toString()?.replace(regEx, this.options.maskPlaceholder) as T;
-                  });
-                  return source;
-              })(source);
-    }
-
-    private _recursiveCloneAndExecuteFunctions<T>(source: T, seen: unknown[] = []): T {
-        if (seen.includes(source)) {
-            return { ...source };
-        }
-        if (typeof source === "object") {
-            seen.push(source);
-        }
-
-        return Array.isArray(source)
-            ? source.map((item) => this._recursiveCloneAndExecuteFunctions(item, seen))
-            : source instanceof Date
-            ? new Date(source.getTime())
-            : source && typeof source === "object"
-            ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-                  Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop) as PropertyDescriptor);
-                  // execute functions or clone
-                  o[prop] =
-                      typeof source[prop] === "function"
-                          ? source[prop]()
-                          : this._recursiveCloneAndExecuteFunctions((source as { [key: string]: unknown })[prop], seen);
-                  return o;
-              }, Object.create(Object.getPrototypeOf(source)))
-            : (source as T);
-    }
-
-    private _cloneError<T extends Error>(error: T): T {
-        const ErrorConstructor = error.constructor as new (message?: string) => T;
-        const newError = new ErrorConstructor(error.message);
-        Object.assign(newError, error);
-        const propertyNames = Object.getOwnPropertyNames(newError);
-        for (const propName of propertyNames) {
-            const propDesc = Object.getOwnPropertyDescriptor(newError, propName);
-            if (propDesc) {
-                propDesc.writable = true;
-                Object.defineProperty(newError, propName, propDesc);
-            }
-        }
-        return newError;
-    }
-
-    private _toErrorObject(error: Error): IErrorObject {
-        return {
-            nativeError: error,
-            name: error.name ?? "Error",
-            message: error.message,
-            stack: getErrorTrace(error),
-        };
     }
 
     /**
