@@ -1,17 +1,12 @@
 {
-    "name": "@soundboks/tslog",
-    "version": "5.0.0-alpha.12",
+    "name": "@soundboks/timbergeist",
+    "version": "1.0.0",
     "description": "Development fork of fullstack-build/tslog for convenience internally. Use at your own peril.",
-    "author": "Eugene <opensource@terehov.de> (http://fullstack.build/)",
+    "author": "SOUNDBOKS",
     "license": "MIT",
-    "funding": "https://github.com/fullstack-build/tslog?sponsor=1",
-    "homepage": "https://tslog.js.org",
-    "repository": "https://github.com/soundboks/tslog",
+    "repository": "https://github.com/soundboks/timbergeist",
     "publishConfig": {
         "registry": "https://npm.pkg.github.com"
-    },
-    "bugs": {
-        "url": "https://github.com/fullstack-build/tslog/issues"
     },
     "main": "./dist/cjs/index.js",
     "types": "./dist/types/index.d.ts",
@@ -84,38 +79,5 @@
         "ts-node": "^10.9.1",
         "typescript": "^4.7.4"
     },
-    "sideEffects": false,
-    "keywords": [
-        "logger",
-        "typescript",
-        "log level",
-        "json",
-        "stacktrace",
-        "Error.stack",
-        "call location",
-        "debug",
-        "pretty",
-        "log",
-        "log4j",
-        "log4js",
-        "log4ts",
-        "print",
-        "logging",
-        "bunyan",
-        "winston",
-        "stack",
-        "trace",
-        "pretty print",
-        "prettify",
-        "format",
-        "human",
-        "callsites",
-        "callsite",
-        "show error",
-        "handling exceptions",
-        "pretty log",
-        "pretty json",
-        "pretty-error",
-        "sourcemap"
-    ]
+    "sideEffects": false
 }
