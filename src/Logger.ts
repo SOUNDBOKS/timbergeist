@@ -1,5 +1,5 @@
-import { getMeta, getErrorTrace, isError, isBuffer } from "./runtime/index.js";
-import { ILogOptionsParam, ILogOptions, ILogObjMeta, IErrorObject, ITransport } from "./interfaces.js";
+import { getMeta } from "./runtime/index.js";
+import { ILogOptionsParam, ILogOptions, ILogObjMeta, ITransport } from "./interfaces.js";
 import { ConsoleSink, PrettyPrinterTransport } from "./prettyPrinter.js";
 export * from "./interfaces.js";
 
