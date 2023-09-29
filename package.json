@@ -5,9 +5,6 @@
     "author": "SOUNDBOKS",
     "license": "MIT",
     "repository": "https://github.com/soundboks/timbergeist",
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com"
-    },
     "main": "./dist/cjs/index.js",
     "types": "./dist/types/index.d.ts",
     "scripts": {
@@ -27,8 +24,10 @@
         "coverage": "JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs jest --coverage",
         "docsify-init": "docsify init ./docs",
         "docsify-serve": "cd docs && docsify serve",
-        "pre-publish": "npm run build",
-        "release": "np --any-branch"
+        "prerelease": "npm run build",
+        "release": "yarn release:github && yarn release:npm",
+        "release:github": "yarn prerelease && yarn publish --registry=https://npm.pkg.github.com --no-git-tag-version",
+        "release:npm": "yarn prerelease && yarn publish --no-git-tag-version --access public"
     },
     "engines": {
         "node": ">=16"
@@ -54,10 +53,10 @@
         "contents": "."
     },
     "dependencies": {
-        "@types/node": "^17.0.29",
         "node-inspect-extracted": "^2.0.2"
     },
     "devDependencies": {
+        "@types/node": "^17.0.29",
         "@jest/types": "^28.1.3",
         "@types/expect-puppeteer": "^5.0.1",
         "@types/jest-environment-puppeteer": "^5.0.2",
