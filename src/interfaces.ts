@@ -1,6 +1,7 @@
 import type { InspectOptions } from "./runtime/util.inspect.polyfil";
 
  export type ILogObjMeta = {
+    __tgLogFormatVersion: 1,
     date: Date;
     logLevelId: number;
     logLevelName: string;

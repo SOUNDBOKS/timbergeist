@@ -1,13 +1,11 @@
 import { ILogObjMeta, IPrettyPrinterTransportSettings, IStackFrame } from "../interfaces.js";
 import { formatTemplate } from "../formatTemplate.js";
-import { formatWithOptions } from "./util.inspect.polyfil.js";
-import { jsonStringifyRecursive } from "./helper.jsonStringifyRecursive.js";
 
 const pathRegex = /(?:(?:file|https?|global code|[^@]+)@)?(?:file:)?((?:\/[^:/]+){2,})(?::(\d+))?(?::(\d+))?/;
 
 export function getMeta(logLevelId: number, logLevelName: string, stackDepthLevel: number, name?: string, parentNames?: string[]): ILogObjMeta {
-    // faster than spread operator
     return {
+        __tgLogFormatVersion: 1,
         name,
         parentNames,
         date: new Date(),
