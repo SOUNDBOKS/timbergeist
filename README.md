@@ -4,13 +4,13 @@
 
 ## Features
 
-🪶 Lightweight (1 runtime dependency)
-🏗 Universal: Works in Browsers and Node.js
-👮‍️ Fully typed even with custom Metadata
-🗃 Structured logging - JSON-first with built in pretty print transforms
-🦸 Plugable transports and transformers
-🤓 Stack trace and pretty errors
-👨‍👧‍👦 Child-logging hierarchies with proper feed-through
+🪶 Lightweight (1 runtime dependency)  
+🏗 Universal: Works in Browsers and Node.js  
+👮‍️ Fully typed even with custom Metadata  
+🗃 Structured logging - JSON-first with built in pretty print transforms  
+🦸 Plugable transports and transformers  
+🤓 Stack trace and pretty errors  
+👨‍👧‍👦 Child-logging hierarchies with proper feed-through  
 
 ## Design Rationale
 
