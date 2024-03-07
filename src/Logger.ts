@@ -18,6 +18,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
         this.options = {
             name: options?.name,
             minLevel: options?.minLevel ?? 0,
+            propagationLevel: options?.propagationLevel ?? 0,
             argumentsArrayName: options?.argumentsArrayName,
             overwrite: {
                 mask: options?.overwrite?.mask,
@@ -47,7 +48,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
             });
         }
 
-        if (this.options.propagateLogsToParent && this.parentLogger) {
+        if (this.options.propagateLogsToParent && meta.logLevelId >= this.options.propagationLevel && this.parentLogger) {
             this.parentLogger.transport(maskedArgs, meta);
         }
     }
