@@ -27,6 +27,7 @@ export interface ILogOptionsParam<Meta extends ILogObjMeta > {
     minLevel?: number;
     argumentsArrayName?: string;
     propagateLogsToParent?: boolean;
+    propagationLevel?: number;
     parentNames?: string[];
     overwrite?: {
         mask?: (args: unknown[]) => unknown[];
@@ -72,6 +73,7 @@ export interface ILogOptions<Meta extends ILogObjMeta> extends ILogOptionsParam<
     name?: string;
     minLevel: number;
     propagateLogsToParent: boolean;
+    propagationLevel: number;
 }
 
 export interface IStackFrame {
