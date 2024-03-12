@@ -1,7 +1,7 @@
 import "ts-jest";
 import { ok } from "assert";
 import { Logger } from "../../src/index.js";
-import { getConsoleLog, mockConsoleLog } from "./helper.js";
+import { getConsoleOutput, mockConsoleLog } from "./helper.js";
 
 class MissingSetter {
     get testProp(): string {
@@ -29,7 +29,7 @@ describe("Getters and setters", () => {
         const result = logger.info(missingSetterObj);
         ok(result);
         expect(Object.keys(result)).not.toContain("testProp");
-        expect(getConsoleLog()).not.toContain("testProp");
+        expect(getConsoleOutput()).not.toContain("testProp");
     });
 
     test("[object] should print getters", (): void => {
@@ -39,6 +39,6 @@ describe("Getters and setters", () => {
         const result = logger.info(missingSetter);
         ok(result);
         expect(Object.keys(result)).toContain("testProp");
-        expect(getConsoleLog()).toContain("testProp");
+        expect(getConsoleOutput()).toContain("testProp");
     });
 });

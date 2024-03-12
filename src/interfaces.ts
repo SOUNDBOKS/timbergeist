@@ -26,12 +26,11 @@ export interface ILogOptionsParam<Meta extends ILogObjMeta > {
     name?: string;
     minLevel?: number;
     argumentsArrayName?: string;
-    propagateLogsToParent?: boolean;
-    propagationLevel?: number;
     parentNames?: string[];
     overwrite?: {
         mask?: (args: unknown[]) => unknown[];
         mapMeta?: (logArgs: unknown[], baseMeta: ILogObjMeta) => ILogObjMeta;
+        shouldPropagate?: (logArgs: unknown[], baseMeta: ILogObjMeta) => boolean;
     };
     defaultMetadata?: Omit<Meta, keyof ILogObjMeta>,
 }
@@ -72,8 +71,6 @@ export interface IPrettyPrinterTransportSettings {
 export interface ILogOptions<Meta extends ILogObjMeta> extends ILogOptionsParam<Meta> {
     name?: string;
     minLevel: number;
-    propagateLogsToParent: boolean;
-    propagationLevel: number;
 }
 
 export interface IStackFrame {

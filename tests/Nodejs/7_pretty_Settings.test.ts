@@ -1,6 +1,6 @@
 import "ts-jest";
 import { Logger } from "../../src/index.js";
-import { getConsoleLog, mockConsoleLog } from "./helper.js";
+import { getConsoleOutput, mockConsoleLog } from "./helper.js";
 
 describe("Pretty: Settings", () => {
     beforeEach(() => {
@@ -10,14 +10,14 @@ describe("Pretty: Settings", () => {
     test("plain string", (): void => {
         const logger = new Logger({ type: "pretty" });
         logger.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain("testLevel");
-        expect(getConsoleLog()).toContain("Test");
+        expect(getConsoleOutput()).toContain("testLevel");
+        expect(getConsoleOutput()).toContain("Test");
     });
 
     test("two strings", (): void => {
         const logger = new Logger({ type: "pretty" });
         logger.log(1234, "testLevel", "Test1", "Test2");
-        expect(getConsoleLog()).toContain("Test1 Test2");
+        expect(getConsoleOutput()).toContain("Test1 Test2");
     });
 
     test("name", (): void => {
@@ -25,7 +25,7 @@ describe("Pretty: Settings", () => {
         const log = logger.log(1, "testLevel", "foo bar");
         expect(log).toBeDefined();
         expect(log?._meta?.name).toBe("logger");
-        expect(getConsoleLog()).toContain(`logger`);
+        expect(getConsoleOutput()).toContain(`logger`);
     });
 
     test("name with sub-logger inheritance", (): void => {
@@ -44,9 +44,9 @@ describe("Pretty: Settings", () => {
         expect(log2?._meta?.name).toBe("logger2");
         expect(log3?._meta?.name).toBe("logger3");
 
-        expect(getConsoleLog()).toContain(`logger1`);
-        expect(getConsoleLog()).toContain(`logger1:logger2`);
-        expect(getConsoleLog()).toContain(`logger1:logger2:logger3`);
+        expect(getConsoleOutput()).toContain(`logger1`);
+        expect(getConsoleOutput()).toContain(`logger1:logger2`);
+        expect(getConsoleOutput()).toContain(`logger1:logger2:logger3`);
     });
 
     test("argumentsArray", (): void => {
@@ -55,7 +55,7 @@ describe("Pretty: Settings", () => {
             argumentsArrayName: "argumentsArray",
         });
         logger.log(1234, "testLevel", "Test1", "Test2");
-        expect(getConsoleLog()).toContain("Test1 Test2");
+        expect(getConsoleOutput()).toContain("Test1 Test2");
     });
 
     test("hideLogPositionForProduction", (): void => {
@@ -72,14 +72,14 @@ describe("Pretty: Settings", () => {
 
         loggerNormal.log(1234, "testLevel", "Normal log");
         loggerProduction.log(1234, "testLevel", "Production log");
-        expect(getConsoleLog()).toContain("testLevel\t/tests/Nodejs/7_pretty_Settings.test.ts:73\tNormal log");
-        expect(getConsoleLog()).toContain("testLevel\t\tProduction log");
+        expect(getConsoleOutput()).toContain("testLevel\t/tests/Nodejs/7_pretty_Settings.test.ts:73\tNormal log");
+        expect(getConsoleOutput()).toContain("testLevel\t\tProduction log");
     });
 
     test("metaProperty", (): void => {
         const logger = new Logger({ type: "pretty", metaProperty: "_test" });
         logger.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain("Test");
+        expect(getConsoleOutput()).toContain("Test");
     });
 
     test("Don't mask", (): void => {
@@ -95,12 +95,12 @@ describe("Pretty: Settings", () => {
             },
         });
 
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey:");
-        expect(getConsoleLog()).toContain("otherKey456");
-        expect(getConsoleLog()).toContain("moviePassword:");
-        expect(getConsoleLog()).toContain("swordfish");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey:");
+        expect(getConsoleOutput()).toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("moviePassword:");
+        expect(getConsoleOutput()).toContain("swordfish");
     });
 
     test("maskValuesOfKeys not set", (): void => {
@@ -108,9 +108,9 @@ describe("Pretty: Settings", () => {
         logger.log(1234, "testLevel", {
             password: "pass123",
         });
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("'[***]'");
-        expect(getConsoleLog()).not.toContain("pass123");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("'[***]'");
+        expect(getConsoleOutput()).not.toContain("pass123");
     });
 
     test("maskValuesOfKeys set and maskPlaceholder", (): void => {
@@ -124,10 +124,10 @@ describe("Pretty: Settings", () => {
             otherKey: "otherKey456",
         });
 
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey:");
-        expect(getConsoleLog()).not.toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey:");
+        expect(getConsoleOutput()).not.toContain("otherKey456");
     });
 
     test("maskValuesOfKeys set two keys and maskPlaceholder", (): void => {
@@ -141,13 +141,13 @@ describe("Pretty: Settings", () => {
             otherKey: "otherKey456",
             yetAnotherKey: "otherKey789",
         });
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("[###]");
-        expect(getConsoleLog()).not.toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey:");
-        expect(getConsoleLog()).not.toContain("otherKey456");
-        expect(getConsoleLog()).toContain("yetAnotherKey:");
-        expect(getConsoleLog()).toContain("otherKey789");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("[###]");
+        expect(getConsoleOutput()).not.toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey:");
+        expect(getConsoleOutput()).not.toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("yetAnotherKey:");
+        expect(getConsoleOutput()).toContain("otherKey789");
     });
 
     test("maskValuesOfKeys set and maskPlaceholder nested object", (): void => {
@@ -164,13 +164,13 @@ describe("Pretty: Settings", () => {
             },
         });
 
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("[###]");
-        expect(getConsoleLog()).toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey:");
-        expect(getConsoleLog()).not.toContain("otherKey456");
-        expect(getConsoleLog()).toContain("moviePassword:");
-        expect(getConsoleLog()).not.toContain("swordfish");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("[###]");
+        expect(getConsoleOutput()).toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey:");
+        expect(getConsoleOutput()).not.toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("moviePassword:");
+        expect(getConsoleOutput()).not.toContain("swordfish");
     });
 
     test("maskValuesOfKeys and maskValuesOfKeysCaseInsensitive", (): void => {
@@ -183,11 +183,11 @@ describe("Pretty: Settings", () => {
             password: "pass123",
             otherKey: "otherKey456",
         });
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("[***]");
-        expect(getConsoleLog()).not.toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey:");
-        expect(getConsoleLog()).not.toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("[***]");
+        expect(getConsoleOutput()).not.toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey:");
+        expect(getConsoleOutput()).not.toContain("otherKey456");
     });
 
     test("maskValuesOfKeys and don't manipulate original", (): void => {
@@ -201,11 +201,11 @@ describe("Pretty: Settings", () => {
             otherKey: "otherKey456",
         };
         logger.log(1234, "testLevel", obj);
-        expect(getConsoleLog()).toContain("password:");
-        expect(getConsoleLog()).toContain("[***]");
-        expect(getConsoleLog()).not.toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey:");
-        expect(getConsoleLog()).not.toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("password:");
+        expect(getConsoleOutput()).toContain("[***]");
+        expect(getConsoleOutput()).not.toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey:");
+        expect(getConsoleOutput()).not.toContain("otherKey456");
         expect(obj.password).toBe("pass123");
         expect(obj.otherKey).toBe("otherKey456");
     });
@@ -224,30 +224,30 @@ describe("Pretty: Settings", () => {
 
         logger.log(1234, "testLevel", logObj);
 
-        expect(getConsoleLog()).toContain("password: '[***]'");
-        expect(getConsoleLog()).not.toContain("pass123");
-        expect(getConsoleLog()).toContain("otherKey: '[***]456'");
-        expect(getConsoleLog()).not.toContain("otherKey456");
+        expect(getConsoleOutput()).toContain("password: '[***]'");
+        expect(getConsoleOutput()).not.toContain("pass123");
+        expect(getConsoleOutput()).toContain("otherKey: '[***]456'");
+        expect(getConsoleOutput()).not.toContain("otherKey456");
 
         logger.log(4567, "testLevel", undefined);
-        expect(getConsoleLog()).toContain("undefined");
+        expect(getConsoleOutput()).toContain("undefined");
         logger.log(4567, "testLevel", "string");
-        expect(getConsoleLog()).toContain("string");
+        expect(getConsoleOutput()).toContain("string");
         logger.log(4567, "testLevel", 0);
-        expect(getConsoleLog()).toContain("0");
+        expect(getConsoleOutput()).toContain("0");
         logger.log(4567, "testLevel", NaN);
-        expect(getConsoleLog()).toContain("NaN");
+        expect(getConsoleOutput()).toContain("NaN");
         logger.log(4567, "testLevel", { object: true });
-        expect(getConsoleLog()).toContain(`{
+        expect(getConsoleOutput()).toContain(`{
   object: 'true'
 }`);
         logger.log(4567, "testLevel", new Date());
-        expect(getConsoleLog()).toContain("T");
-        expect(getConsoleLog()).toContain("Z");
+        expect(getConsoleOutput()).toContain("T");
+        expect(getConsoleOutput()).toContain("Z");
         logger.log(4567, "testLevel", Buffer.from("foo"));
-        expect(getConsoleLog()).toContain("<Buffer");
+        expect(getConsoleOutput()).toContain("<Buffer");
         logger.log(4567, "testLevel", new Error("test"));
-        expect(getConsoleLog()).toContain("error stack");
+        expect(getConsoleOutput()).toContain("error stack");
 
         // don't manipulate original object
         expect(logObj.password).toBe("pass123");
@@ -263,8 +263,8 @@ describe("Pretty: Settings", () => {
             stylePrettyLogs: false,
         });
         logger.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().replace("T", " ").split(".")[0]}`);
-        expect(getConsoleLog()).toContain("** Test");
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().replace("T", " ").split(".")[0]}`);
+        expect(getConsoleOutput()).toContain("** Test");
     });
 
     test("stylePrettyLogs: false / prettyLogTemplate - no shortcut: {{dd}}.{{mm}}.{{yyyy}} {{hh}}:{{MM}}", (): void => {
@@ -283,7 +283,7 @@ describe("Pretty: Settings", () => {
         const hh = dateHours == null ? "--" : dateHours < 10 ? "0" + dateHours : dateHours;
         const dateMinutes = new Date().getUTCMinutes();
         const MM = dateMinutes == null ? "--" : dateMinutes < 10 ? "0" + dateMinutes : dateMinutes;
-        expect(getConsoleLog()).toContain(`**${dd}.${mm}.${yyyy} ${hh}:${MM}** Test`);
+        expect(getConsoleOutput()).toContain(`**${dd}.${mm}.${yyyy} ${hh}:${MM}** Test`);
     });
 
     test("stylePrettyLogs: false / prettyLogTemplate - shortcut: {{dateIsoStr}}", (): void => {
@@ -293,8 +293,8 @@ describe("Pretty: Settings", () => {
             stylePrettyLogs: false,
         });
         logger.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().replace("T", " ").replace("Z", "").split(".")[0]}`);
-        expect(getConsoleLog()).toContain("** Test");
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().replace("T", " ").replace("Z", "").split(".")[0]}`);
+        expect(getConsoleOutput()).toContain("** Test");
     });
 
     test("prettyLogTemplate - rawIsoStr", (): void => {
@@ -304,8 +304,8 @@ describe("Pretty: Settings", () => {
             stylePrettyLogs: false,
         });
         logger.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().split(".")[0]}`);
-        expect(getConsoleLog()).toContain("** Test");
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain("** Test");
     });
 
     test("prettyLogTimeZone - rawIsoStr - UTC (default)", (): void => {
@@ -316,7 +316,7 @@ describe("Pretty: Settings", () => {
         });
 
         loggerShortcut.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().split(".")[0]}`);
     });
 
     test("prettyLogTimeZone - rawIsoStr - UTC (configured)", (): void => {
@@ -328,7 +328,7 @@ describe("Pretty: Settings", () => {
         });
 
         loggerShortcut.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().split(".")[0]}`);
     });
 
     test("prettyLogTimeZone - rawIsoStr - local (configured)", (): void => {
@@ -340,7 +340,7 @@ describe("Pretty: Settings", () => {
         });
 
         loggerShortcut.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain(`**${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split(".")[0]}`);
     });
 
     test("prettyLogTimeZone - {{yyyy}}-{{mm}}-{{dd}}T{{hh}}:{{MM}}:{{ss}} - UTC (default)", (): void => {
@@ -351,7 +351,7 @@ describe("Pretty: Settings", () => {
         });
 
         loggerShortcut.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().split(".")[0]}`);
     });
 
     test("prettyLogTimeZone - {{yyyy}}-{{mm}}-{{dd}}T{{hh}}:{{MM}}:{{ss}} - UTC (configured)", (): void => {
@@ -363,7 +363,7 @@ describe("Pretty: Settings", () => {
         });
 
         loggerShortcut.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date().toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain(`**${new Date().toISOString().split(".")[0]}`);
     });
 
     test("prettyLogTimeZone - {{yyyy}}-{{mm}}-{{dd}}T{{hh}}:{{MM}}:{{ss}} - local (configured)", (): void => {
@@ -375,7 +375,7 @@ describe("Pretty: Settings", () => {
         });
 
         loggerShortcut.log(1234, "testLevel", "Test");
-        expect(getConsoleLog()).toContain(`**${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split(".")[0]}`);
+        expect(getConsoleOutput()).toContain(`**${new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split(".")[0]}`);
     });
 
     test("Change settings: minLevel", (): void => {
@@ -391,9 +391,9 @@ describe("Pretty: Settings", () => {
         logger.log(1, "custom_level_one", "LOG3");
         logger.log(2, "custom_level_two", "LOG4");
 
-        expect(getConsoleLog()).toContain(`LOG1`);
-        expect(getConsoleLog()).toContain(`LOG2`);
-        expect(getConsoleLog()).not.toContain(`LOG3`);
-        expect(getConsoleLog()).toContain(`LOG4`);
+        expect(getConsoleOutput()).toContain(`LOG1`);
+        expect(getConsoleOutput()).toContain(`LOG2`);
+        expect(getConsoleOutput()).not.toContain(`LOG3`);
+        expect(getConsoleOutput()).toContain(`LOG4`);
     });
 });

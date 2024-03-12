@@ -4,10 +4,10 @@ import { Logger } from "../../src/index.js";
 describe("Transports", () => {
     test("attach one transport", (): void => {
         const transports: any[] = [];
-        const logger = new Logger({ type: "hidden" });
-        logger.attachTransport((logObj) => {
+        const logger = new Logger();
+        logger.attachTransport({ transport: (logObj) => {
             transports.push(logObj);
-        });
+        }});
 
         const logMsg = logger.info("string", 0, { test: 123 });
 
@@ -16,13 +16,13 @@ describe("Transports", () => {
 
     test("attach two transport", (): void => {
         const transports: any[] = [];
-        const logger = new Logger({ type: "hidden" });
-        logger.attachTransport((logObj) => {
+        const logger = new Logger();
+        logger.attachTransport({transport: (logObj) => {
             transports.push(logObj);
-        });
-        logger.attachTransport((logObj) => {
+        }});
+        logger.attachTransport({transport: (logObj) => {
             transports.push(logObj);
-        });
+        }});
 
         const logMsg = logger.info("string", 0, { test: 123 });
 

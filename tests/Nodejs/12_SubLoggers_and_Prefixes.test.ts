@@ -3,11 +3,11 @@ import { Logger } from "../../src/index.js";
 
 describe("SubLoggers", () => {
     test("one sub logger", (): void => {
-        const mainLogger = new Logger({ type: "hidden" });
+        const mainLogger = new Logger();
         const logMsg = mainLogger.info("main logger");
         expect(logMsg?.["0"]).toBe("main logger");
 
-        const subLogger = mainLogger.getSubLogger({ type: "hidden" });
+        const subLogger = mainLogger.getSubLogger();
         const subLogMsg = subLogger.info("sub logger");
         expect(subLogMsg?.["0"]).toBe("sub logger");
     });
