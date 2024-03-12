@@ -22,9 +22,6 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
             overwrite: {
                 mask: options?.overwrite?.mask,
                 mapMeta: options?.overwrite?.mapMeta,
-                shouldPropagate: options?.overwrite?.shouldPropagate ? options?.overwrite?.shouldPropagate : (args: unknown[], meta: ILogObjMeta) => {
-                    return meta.logLevelId >= this.options.minLevel;
-                },
             },
             parentNames: options?.parentNames || [],
             defaultMetadata: options?.defaultMetadata,
@@ -47,12 +44,10 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
             this.attachedTransports.forEach((transport) => {
                 transport.transport(maskedArgs, meta);
             });
-        }
 
-        const shouldPropagate = this.options.overwrite?.shouldPropagate?.call(undefined, args, meta);
-
-        if (shouldPropagate && this.parentLogger) {
-            this.parentLogger.transport(maskedArgs, meta);
+            if (this.parentLogger) {
+                this.parentLogger.transport(maskedArgs, meta);
+            }
         }
     }
 

@@ -30,7 +30,6 @@ export interface ILogOptionsParam<Meta extends ILogObjMeta > {
     overwrite?: {
         mask?: (args: unknown[]) => unknown[];
         mapMeta?: (logArgs: unknown[], baseMeta: ILogObjMeta) => ILogObjMeta;
-        shouldPropagate?: (logArgs: unknown[], baseMeta: ILogObjMeta) => boolean;
     };
     defaultMetadata?: Omit<Meta, keyof ILogObjMeta>,
 }
