@@ -55,7 +55,7 @@ describe("Pretty: Log Types", () => {
     });
 
     test("Object", (): void => {
-        const logger = new Logger();
+        const logger = new Logger({}, [new PrettyPrinterTransport(ConsoleSink, { stylePrettyLogs: false })]);
         logger.log(1234, "testLevel", { test: true, nested: { 1: false } });
         expect(getConsoleOutput()).toContain("{ test: true, nested: { '1': false } }");
     });
@@ -68,7 +68,7 @@ describe("Pretty: Log Types", () => {
     });
 
     test("String, Object", (): void => {
-        const logger = new Logger();
+        const logger = new Logger({}, [new PrettyPrinterTransport(ConsoleSink, { stylePrettyLogs: false })]);
         logger.log(1234, "testLevel", "test", { test: true, nested: { 1: false } });
         expect(getConsoleOutput()).toContain("test { test: true, nested: { '1': false } }");
     });
