@@ -1,5 +1,5 @@
-import { ILogObjMeta, IPrettyPrinterTransportSettings, IStackFrame } from "../interfaces.js";
-import { formatTemplate } from "../formatTemplate.js";
+import { ILogObjMeta, IPrettyPrinterTransportSettings, IStackFrame } from "../interfaces";
+import { formatTemplate } from "../formatTemplate";
 
 const pathRegex = /(?:(?:file|https?|global code|[^@]+)@)?(?:file:)?((?:\/[^:/]+){2,})(?::(\d+))?(?::(\d+))?/;
 
@@ -16,7 +16,7 @@ export function getMeta(logLevelId: number, logLevelName: string, stackDepthLeve
 }
 
 export function getCallerStackFrame(stackDepthLevel: number, error: Error = Error()): IStackFrame {
-    return stackLineToStackFrame((error as Error | undefined)?.stack?.split("\n")?.filter((line: string) => !line.includes("Error: "))?.[stackDepthLevel]);
+    return stackLineToStackFrame((error as Error | undefined)?.stack?.split("\n")?.filter((line: string) => !line.startsWith("Error"))?.[stackDepthLevel]);
 }
 
 export function getErrorTrace(error: Error): IStackFrame[] {
@@ -28,6 +28,20 @@ export function getErrorTrace(error: Error): IStackFrame[] {
 
             return result;
         }, []) as IStackFrame[];
+}
+
+function tryRelativise(path: string) {
+    const isNode = ![typeof process, typeof require].includes("undefined");
+    
+    if (!isNode) {
+        return path;
+    }
+
+    try {
+        return require("path").relative(process.cwd(), path);
+    } catch (e) {
+        return path;
+    }
 }
 
 function stackLineToStackFrame(line?: string): IStackFrame {
@@ -44,8 +58,9 @@ function stackLineToStackFrame(line?: string): IStackFrame {
     if (line != null) {
         const match = line.match(pathRegex);
         if (match) {
-            pathResult.filePath = match[1].replace(/\?.*$/, "");
-            const pathParts = pathResult.filePath.split("/");
+            pathResult.fullFilePath = match[1].replace(/\?.*$/, "");
+            const pathParts = pathResult.fullFilePath.split("/");
+            pathResult.filePath = tryRelativise(pathResult.fullFilePath);
             pathResult.fileName = pathParts[pathParts.length - 1];
             pathResult.fileLine = match[2];
             pathResult.fileColumn = match[3];

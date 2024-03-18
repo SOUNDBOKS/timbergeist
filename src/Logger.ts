@@ -1,7 +1,17 @@
-import { getMeta } from "./runtime/index.js";
-import { ILogOptionsParam, ILogOptions, ILogObjMeta, ITransport } from "./interfaces.js";
-import { ConsoleSink, PrettyPrinterTransport } from "./prettyPrinter.js";
-export * from "./interfaces.js";
+import { getMeta } from "./runtime/index";
+import { ILogOptionsParam, ILogOptions, ILogObjMeta, ITransport } from "./interfaces";
+import { ConsoleSink, PrettyPrinterTransport } from "./prettyPrinter";
+export * from "./interfaces";
+
+export enum LogLevel {
+    SILLY = 0,
+    TRACE = 1,
+    DEBUG = 2,
+    INFO = 3,
+    WARN = 4,
+    ERROR = 5,
+    FATAL = 6,
+}
 
 export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
     private parentLogger: Logger<Meta> | null = null;
@@ -103,7 +113,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public silly(...args: unknown[]) {
-        return this.log(0, "SILLY", ...args);
+        return this.log(LogLevel.SILLY, "SILLY", ...args);
     }
 
     /**
@@ -111,7 +121,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public trace(...args: unknown[]) {
-        return this.log(1, "TRACE", ...args);
+        return this.log(LogLevel.TRACE, "TRACE", ...args);
     }
 
     /**
@@ -119,7 +129,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public debug(...args: unknown[]) {
-        return this.log(2, "DEBUG", ...args);
+        return this.log(LogLevel.DEBUG, "DEBUG", ...args);
     }
 
     /**
@@ -127,7 +137,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public info(...args: unknown[]) {
-        return this.log(3, "INFO", ...args);
+        return this.log(LogLevel.INFO, "INFO", ...args);
     }
 
     /**
@@ -135,7 +145,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public warn(...args: unknown[]) {
-        return this.log(4, "WARN", ...args);
+        return this.log(LogLevel.SILLY, "WARN", ...args);
     }
 
     /**
@@ -143,7 +153,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public error(...args: unknown[]) {
-        return this.log(5, "ERROR", ...args);
+        return this.log(LogLevel.ERROR, "ERROR", ...args);
     }
 
     /**
@@ -151,6 +161,6 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public fatal(...args: unknown[]) {
-        return this.log(6, "FATAL", ...args);
+        return this.log(LogLevel.FATAL, "FATAL", ...args);
     }
 }

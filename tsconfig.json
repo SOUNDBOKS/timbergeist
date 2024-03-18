@@ -4,7 +4,7 @@
     "compilerOptions": {
         "lib": ["es2020", "dom"],
         "target": "es2020",
-        "module": "esnext",
+        "module": "CommonJS",
         "moduleResolution": "Node",
         "types": ["node", "jest", "puppeteer", "jest-environment-puppeteer", "expect-puppeteer"],
         "emitDecoratorMetadata": true,
@@ -12,10 +12,9 @@
         "inlineSourceMap": false,
         "strict": true,
         "skipLibCheck": true,
-        "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
         "removeComments": true,
         "outDir": "dist"
     },
-    "exclude": ["node_modules", "**/node_modules", "**/dist", "**/tests", "*.test.ts"]
+    "include": ["src/**/*.ts"]
 }

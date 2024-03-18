@@ -19,7 +19,7 @@
         "dev-js": "npm run build-example && node --experimental-specifier-resolution=node --enable-source-maps examples/dist/examples/nodejs/index2.js",
         "lint": "eslint --ext .js,.ts .",
         "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-        "test": "JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs jest",
+        "test": "JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs jest && yarn ts-node tests/RAW/stack_trace.test.ts",
         "test-puppeteer-serve": "npm run build-browser && node tests/Browser/server/index.cjs -p 4444",
         "coverage": "JEST_PUPPETEER_CONFIG=jest-puppeteer.config.cjs jest --coverage",
         "docsify-init": "docsify init ./docs",
