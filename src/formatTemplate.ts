@@ -1,5 +1,5 @@
-import { IPrettyPrinterTransportSettings, TStyle } from "./interfaces.js";
-import { prettyLogStyles } from "./prettyLogStyles.js";
+import { IPrettyPrinterTransportSettings, TStyle } from "./interfaces";
+import { prettyLogStyles } from "./prettyLogStyles";
 
 export function formatTemplate(settings: IPrettyPrinterTransportSettings, template: string, values: { [key: string]: string }, hideUnsetPlaceholder = false) {
     const templateString = String(template);
@@ -21,8 +21,8 @@ export function formatTemplate(settings: IPrettyPrinterTransportSettings, templa
         }
     };
 
-    return templateString.replace(/{{(.+?)}}/g, (_, placeholder) => {
+    return templateString.replace(/{{(.+?)}}/g, (_, placeholder: string) => {
         const value = values[placeholder] != null ? values[placeholder] : hideUnsetPlaceholder ? "" : _;
-        return settings.stylePrettyLogs ? styleWrap(value, settings?.prettyLogStyles?.[placeholder]) + ansiColorWrap("", prettyLogStyles.reset) : value;
+        return settings.stylePrettyLogs ? styleWrap(value, (settings?.prettyLogStyles as Record<string, TStyle>)?.[placeholder]) + ansiColorWrap("", prettyLogStyles.reset) : value;
     });
 }

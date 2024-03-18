@@ -1,3 +1,4 @@
+import { LogLevel } from "./Logger";
 import { formatNumberAddZeros } from "./formatNumberAddZeros";
 import { formatTemplate } from "./formatTemplate";
 import { ILogObjMeta, IPrettyPrinterTransportSettings, ITransport } from "./interfaces";
@@ -7,7 +8,7 @@ import { formatWithOptions } from "./runtime/util.inspect.polyfil";
 export type Sink = (formattedString: string, logLevelId: number) => void;
 
 export const ConsoleSink = (formattedString: string, logLevelId: number) => {
-    if (logLevelId >= 4) {
+    if (logLevelId >= LogLevel.WARN) {
         console.error(formattedString);
     } else {
         console.log(formattedString);
@@ -78,14 +79,14 @@ export class PrettyPrinterTransport implements ITransport {
 
         let template = this.settings.prettyLogTemplate;
 
-        const placeholderValues = {};
+        const placeholderValues: Record<string, string> = {};
 
         // date and time performance fix
         if (template.includes("{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}")) {
             template = template.replace("{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}", "{{dateIsoStr}}");
         } else {
             if (this.settings.prettyLogTimeZone === "UTC") {
-                placeholderValues["yyyy"] = logObjMeta?.date?.getUTCFullYear() ?? "----";
+                placeholderValues["yyyy"] = logObjMeta?.date?.getUTCFullYear().toString() ?? "----";
                 placeholderValues["mm"] = formatNumberAddZeros(logObjMeta?.date?.getUTCMonth(), 2, 1);
                 placeholderValues["dd"] = formatNumberAddZeros(logObjMeta?.date?.getUTCDate(), 2);
                 placeholderValues["hh"] = formatNumberAddZeros(logObjMeta?.date?.getUTCHours(), 2);
@@ -93,7 +94,7 @@ export class PrettyPrinterTransport implements ITransport {
                 placeholderValues["ss"] = formatNumberAddZeros(logObjMeta?.date?.getUTCSeconds(), 2);
                 placeholderValues["ms"] = formatNumberAddZeros(logObjMeta?.date?.getUTCMilliseconds(), 3);
             } else {
-                placeholderValues["yyyy"] = logObjMeta?.date?.getFullYear() ?? "----";
+                placeholderValues["yyyy"] = logObjMeta?.date?.getFullYear().toString() ?? "----";
                 placeholderValues["mm"] = formatNumberAddZeros(logObjMeta?.date?.getMonth(), 2, 1);
                 placeholderValues["dd"] = formatNumberAddZeros(logObjMeta?.date?.getDate(), 2);
                 placeholderValues["hh"] = formatNumberAddZeros(logObjMeta?.date?.getHours(), 2);

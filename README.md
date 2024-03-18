@@ -14,9 +14,12 @@
 
 ## Design Rationale
 
+### Child Loggers and Log Propagation
+
+
 ### Log Object Format
 
-In Timbergeist logs are represented by a collection of javascript objects. There is not concept of a format strings or log id etc. Timbergeist is built to be flexible enough that these features can be built on top in a straight forward way.  
+In Timbergeist logs are represented by a collection of javascript objects. There is no concept of a format strings or log id etc. Timbergeist is built to be flexible enough that these features can be built on top in a straight forward way.  
   
 Once serialised, the object structure could look something like this:
 ```json
