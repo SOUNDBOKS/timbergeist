@@ -1,6 +1,6 @@
 {
     "name": "@soundboks/timbergeist",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Development fork of fullstack-build/tslog for convenience internally. Use at your own peril.",
     "author": "SOUNDBOKS",
     "license": "MIT",
@@ -25,7 +25,7 @@
         "docsify-init": "docsify init ./docs",
         "docsify-serve": "cd docs && docsify serve",
         "prerelease": "npm run build",
-        "release": "yarn release:github",
+        "release": "yarn release:github && yarn release:npm",
         "release:github": "yarn prerelease && yarn publish --registry=https://npm.pkg.github.com --no-git-tag-version",
         "release:npm": "yarn prerelease && yarn publish --no-git-tag-version --access public"
     },
