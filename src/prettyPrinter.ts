@@ -8,7 +8,7 @@ import { formatWithOptions } from "./runtime/util.inspect.polyfil";
 export type Sink = (formattedString: string, logLevelId: number) => void;
 
 export const ConsoleSink = (formattedString: string, logLevelId: number) => {
-    if (logLevelId >= LogLevel.WARN) {
+    if (logLevelId >= LogLevel.ERROR) {
         console.error(formattedString);
     } else {
         console.log(formattedString);
