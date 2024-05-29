@@ -30,18 +30,34 @@ export function getErrorTrace(error: Error): IStackFrame[] {
         }, []) as IStackFrame[];
 }
 
+
+/**
+ * Very mediocre re-implementation of path.relative
+ * Does not currently handle the root being under the path.
+ * 
+ * i.e. root = /a/b/c and path = /a/foo
+ * in these cases we don't try to relativise
+ * 
+ * @param root
+ * @param path 
+ * @returns 
+ */
+function pathRelative(root: string, path: string) {
+    if (path.startsWith(root)) {
+        return "." + path.slice(root.length);
+    }
+
+    return path;
+}
+
 function tryRelativise(path: string) {
     const isNode = ![typeof process, typeof require].includes("undefined");
     
-    if (!isNode) {
+    if (!isNode || !process.cwd) {
         return path;
     }
 
-    try {
-        return require("path").relative(process.cwd(), path);
-    } catch (e) {
-        return path;
-    }
+    return pathRelative(process.cwd(), path);
 }
 
 function stackLineToStackFrame(line?: string): IStackFrame {
