@@ -145,7 +145,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
      * @param args  - Multiple log attributes that should be logged out.
      */
     public warn(...args: unknown[]) {
-        return this.log(LogLevel.SILLY, "WARN", ...args);
+        return this.log(LogLevel.WARN, "WARN", ...args);
     }
 
     /**

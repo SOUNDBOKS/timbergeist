@@ -1,6 +1,6 @@
 {
     "name": "@soundboks/timbergeist",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "Development fork of fullstack-build/tslog for convenience internally. Use at your own peril.",
     "author": "SOUNDBOKS",
     "license": "MIT",
