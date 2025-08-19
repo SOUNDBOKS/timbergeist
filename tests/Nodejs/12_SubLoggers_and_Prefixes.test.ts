@@ -3,45 +3,35 @@ import { Logger } from "../../src/index.js";
 
 describe("SubLoggers", () => {
     test("one sub logger", (): void => {
+        const transports: any[] = [];
         const mainLogger = new Logger();
-        const logMsg = mainLogger.info("main logger");
-        expect(logMsg?.["0"]).toBe("main logger");
+        mainLogger.attachTransport({ transport: (logObj) => {
+            transports.push(logObj);
+        }});
+        mainLogger.info("main logger");
+        expect(transports[0]).toMatchObject({
+            "0": "main logger",
+        });
 
         const subLogger = mainLogger.getSubLogger();
-        const subLogMsg = subLogger.info("sub logger");
-        expect(subLogMsg?.["0"]).toBe("sub logger");
+        subLogger.info("sub logger");
+        expect(transports[1]).toMatchObject({
+            "0": "sub logger",
+        });
     });
 
     test("one sub logger with prefix", (): void => {
-        const mainLogger = new Logger({ type: "hidden", prefix: ["main"] });
-        const logMsg = mainLogger.info("test-main");
-        expect(logMsg?.["0"]).toBe("main");
-        expect(logMsg?.["1"]).toBe("test-main");
+        const loggerNames: any[] = [];
+        const mainLogger = new Logger({ name: "main" });
+        mainLogger.attachTransport({ transport: (logArgs, logMeta) => {
+            loggerNames.push(logMeta);
+        }});
+        mainLogger.info("test-main");
+        expect(loggerNames[0].name).toBe("main");
 
-        const subLogger = mainLogger.getSubLogger({ type: "hidden", prefix: ["sub"] });
-        const subLogMsg = subLogger.info("test-sub");
-        expect(subLogMsg?.["0"]).toBe("main");
-        expect(subLogMsg?.["1"]).toBe("sub");
-        expect(subLogMsg?.["2"]).toBe("test-sub");
-    });
-
-    test("sub logger overwriting LogObj", (): void => {
-        const mainLogObj = {
-            main: true,
-            sub: false,
-        };
-        const mainLogger = new Logger({ type: "hidden" }, mainLogObj);
-        const logMsg = mainLogger.info("main logger");
-        expect(logMsg?.main).toBe(true);
-        expect(logMsg?.sub).toBe(false);
-
-        const subLogObj = {
-            main: false,
-            sub: true,
-        };
-        const subLogger = mainLogger.getSubLogger({ type: "hidden" }, subLogObj);
-        const subLogMsg = subLogger.info("test-sub");
-        expect(subLogMsg?.main).toBe(false);
-        expect(subLogMsg?.sub).toBe(true);
+        const subLogger = mainLogger.getSubLogger({ name: "sub" });
+        subLogger.info("test-sub");
+        expect(loggerNames[1].name).toBe("sub");
+        expect(loggerNames[1].parentNames).toContain("main");
     });
 });
