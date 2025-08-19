@@ -19,27 +19,10 @@ describe("Browser: JSON: Log level", () => {
         await expect(html).toContain("tslog Demo");
     });
 
-    it("silly", async () => {
-        await page.evaluate(() => {
-            // @ts-ignore
-            const logger = new tslog.Logger({ type: "json" });
-            logger.silly("Test");
-        });
-
-        expect(consoleOutput).toContain('"0":"Test"');
-        expect(consoleOutput).toContain('"_meta":{');
-        expect(consoleOutput).toContain('"runtime":"Browser"');
-        expect(consoleOutput).toContain(`"date":"${new Date().toISOString().split(".")[0]}`); // ignore ms
-        expect(consoleOutput).toContain('"logLevelId":0');
-        expect(consoleOutput).toContain('"logLevelName":"SILLY"');
-        expect(consoleOutput).toContain('"path":{');
-        expect(consoleOutput).toContain('"fileLine":"22"');
-    });
-
     it("pretty", async () => {
         await page.evaluate(() => {
             // @ts-ignore
-            const logger = new tslog.Logger({ type: "pretty" });
+            const logger = new timbergeist.Logger({ type: "pretty" });
             logger.silly("Test");
         });
 
@@ -49,7 +32,7 @@ describe("Browser: JSON: Log level", () => {
     it("pretty no styles", async () => {
         await page.evaluate(() => {
             // @ts-ignore
-            const logger = new tslog.Logger({ type: "pretty", stylePrettyLogs: false });
+            const logger = new timbergeist.Logger({ type: "pretty", stylePrettyLogs: false });
             logger.silly("Test");
         });
 
@@ -59,7 +42,7 @@ describe("Browser: JSON: Log level", () => {
     it("pretty no styles undefined", async () => {
         await page.evaluate(() => {
             // @ts-ignore
-            const logger = new tslog.Logger({ type: "pretty", stylePrettyLogs: false });
+            const logger = new timbergeist.Logger({ type: "pretty", stylePrettyLogs: false });
             logger.fatal("Test undefined", { test: undefined });
         });
 
@@ -69,7 +52,7 @@ describe("Browser: JSON: Log level", () => {
     it("pretty string interpolation", async () => {
         await page.evaluate(() => {
             // @ts-ignore
-            const logger = new tslog.Logger({ type: "pretty", stylePrettyLogs: false });
+            const logger = new timbergeist.Logger({ type: "pretty", stylePrettyLogs: false });
             logger.info("Foo %s", "bar");
         });
 

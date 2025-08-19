@@ -1,5 +1,4 @@
 import "ts-jest";
-import { ok } from "assert";
 import { Logger } from "../../src/index.js";
 import { getConsoleOutput, mockConsoleLog } from "./helper.js";
 
@@ -22,23 +21,15 @@ describe("Getters and setters", () => {
 
     test("[class] should not print getters on class instance (prototype)", (): void => {
         // Node.js issue: https://github.com/nodejs/node/issues/30183
-        const logger = new Logger({
-            type: "pretty",
-        });
+        const logger = new Logger();
         const missingSetterObj = new MissingSetter();
-        const result = logger.info(missingSetterObj);
-        ok(result);
-        expect(Object.keys(result)).not.toContain("testProp");
+        logger.info(missingSetterObj);
         expect(getConsoleOutput()).not.toContain("testProp");
     });
 
     test("[object] should print getters", (): void => {
-        const logger = new Logger({
-            type: "pretty",
-        });
-        const result = logger.info(missingSetter);
-        ok(result);
-        expect(Object.keys(result)).toContain("testProp");
+        const logger = new Logger();
+        logger.info(missingSetter);
         expect(getConsoleOutput()).toContain("testProp");
     });
 });

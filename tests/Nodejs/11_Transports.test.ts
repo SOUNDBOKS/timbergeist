@@ -9,9 +9,13 @@ describe("Transports", () => {
             transports.push(logObj);
         }});
 
-        const logMsg = logger.info("string", 0, { test: 123 });
+        logger.info("string", 0, { test: 123 });
 
-        expect(logMsg).toMatchObject(transports[0]);
+        expect(transports[0]).toMatchObject({
+            "0": "string",
+            "1": 0,
+            "2": { test: 123 },
+        });
     });
 
     test("attach two transport", (): void => {
@@ -24,9 +28,17 @@ describe("Transports", () => {
             transports.push(logObj);
         }});
 
-        const logMsg = logger.info("string", 0, { test: 123 });
+        logger.info("string", 0, { test: 123 });
 
-        expect(logMsg).toMatchObject(transports[0]);
-        expect(logMsg).toMatchObject(transports[1]);
+        expect(transports[0]).toMatchObject({
+            "0": "string",
+            "1": 0,
+            "2": { test: 123 },
+        });
+        expect(transports[1]).toMatchObject({
+            "0": "string",
+            "1": 0,
+            "2": { test: 123 },
+        });
     });
 });
