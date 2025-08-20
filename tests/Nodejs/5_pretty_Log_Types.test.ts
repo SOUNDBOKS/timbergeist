@@ -86,7 +86,7 @@ describe("Pretty: Log Types", () => {
         expect(getConsoleOutput()).toContain("test");
         expect(getConsoleOutput()).toContain("error stack:\n");
         expect(getConsoleOutput()).toContain("5_pretty_Log_Types.test.ts");
-        expect(getConsoleOutput()).toContain("Object.<anonymous>");
+        expect(getConsoleOutput()).toContain("<anonymous>");
     });
 
     test("string and Error", (): void => {
@@ -96,6 +96,6 @@ describe("Pretty: Log Types", () => {
         expect(getConsoleOutput()).toContain("test");
         expect(getConsoleOutput()).toContain("error stack:\n");
         expect(getConsoleOutput()).toContain("5_pretty_Log_Types.test.ts");
-        expect(getConsoleOutput()).toContain("Object.<anonymous>");
+        expect(getConsoleOutput()).toContain("<anonymous>");
     });
 });

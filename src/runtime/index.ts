@@ -72,7 +72,7 @@ function stackLineToStackFrame(line?: string): IStackFrame {
         method: undefined,
     };
     if (line != null) {
-        const match = line.match(pathRegex);
+        const match = line.replaceAll("\\", "/").match(pathRegex);
         if (match) {
             pathResult.fullFilePath = match[1].replace(/\?.*$/, "");
             const pathParts = pathResult.fullFilePath.split("/");
