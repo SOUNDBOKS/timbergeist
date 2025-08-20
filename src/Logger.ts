@@ -22,7 +22,7 @@ export class Logger<Meta extends ILogObjMeta = ILogObjMeta> {
     constructor(options?: ILogOptionsParam<Meta>, transports?: ITransport[], private stackDepthLevel: number = 4) {
         const isBrowser = ![typeof window, typeof document].includes("undefined");
         const isSafari = isBrowser ? /^((?!chrome|android).)*safari/i.test(navigator?.userAgent) : false;
-        const isBun = "Bun" in global;
+        const isBun = "Bun" in globalThis;
 
         this.stackDepthLevel = isSafari ? 4 : isBun ? 3 : this.stackDepthLevel;
 
