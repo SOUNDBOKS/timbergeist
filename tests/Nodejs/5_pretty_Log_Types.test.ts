@@ -5,7 +5,7 @@ import { getConsoleOutput, mockConsoleLog } from "./helper.js";
 
 describe("Pretty: Log Types", () => {
     beforeEach(() => {
-        mockConsoleLog(true, true);
+        mockConsoleLog(true, false);
     });
 
     test("plain string", (): void => {

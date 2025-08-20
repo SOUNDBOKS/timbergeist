@@ -6,7 +6,7 @@ const logger = new Logger();
 
 describe("Pretty: Log level", () => {
     beforeEach(() => {
-        mockConsoleLog(true, true);
+        mockConsoleLog(true, false);
     });
 
     test("silly (console)", (): void => {
