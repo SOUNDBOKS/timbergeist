@@ -17,6 +17,7 @@ jobs:
         env:
             CI: true
             COVERAGE: ${{ matrix.node-version == '22.x' && true || false }}
+            SOUNDBOKS_NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         steps:
             - uses: actions/checkout@v4
