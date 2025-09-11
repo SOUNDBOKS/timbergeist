@@ -2,6 +2,8 @@
 
 # Timbergeist: A flexible typescript logging framework
 
+[![CI](https://github.com/SOUNDBOKS/timbergeist/actions/workflows/ci.yml/badge.svg)](https://github.com/SOUNDBOKS/timbergeist/actions/workflows/ci.yml)
+
 ## Features
 
 🪶 Lightweight (1 runtime dependency)  
